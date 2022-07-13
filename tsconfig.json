@@ -1,6 +1,7 @@
 {
   "files": [],
   "compilerOptions": {
+    "moduleResolution": "node",
     "allowJs": true
   },
   "references": [
