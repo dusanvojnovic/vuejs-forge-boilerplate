@@ -7,20 +7,28 @@ import draggable from 'vuedraggable';
 import TaskCard from './TaskCard.vue';
 import { useAlerts } from '@/stores/alerts';
 const alerts = useAlerts();
+
 // props
 const props = defineProps<{
-  board: Board;
-  tasks: Task[];
-  addTask(task: Partial<Task>): Task;
+  board: Partial<Board>;
+  tasks: Task[] | any;
+  addTask(task: Partial<Task>): Promise<Task>;
 }>();
+
 // events
 const emit = defineEmits<{
   (e: 'update', payload: Partial<Board>): void;
 }>();
+
 // local data
 const tasks = reactive(cloneDeep(props.tasks));
 const board = reactive(cloneDeep(props.board));
-const columns = reactive<Column[]>(JSON.parse(board.order as string));
+const columns = reactive<Column[]>(
+  typeof board.order === 'string'
+    ? JSON.parse(board.order as string)
+    : board.order
+);
+
 // methods
 function addColumn() {
   columns.push({
@@ -29,12 +37,14 @@ function addColumn() {
     taskIds: [],
   });
 }
+
 watch(columns, () => {
   emit(
     'update',
     cloneDeep({ ...board, order: JSON.stringify(toRaw(columns)) })
   );
 });
+
 async function addTask({ column, title }: { column: Column; title: string }) {
   const newTask = { title };
   try {

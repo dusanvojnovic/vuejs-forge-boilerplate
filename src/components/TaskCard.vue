@@ -9,9 +9,11 @@ import {
 } from '@progress/kendo-vue-layout';
 import { Chip } from '@progress/kendo-vue-buttons';
 import { useDateFormat } from '@vueuse/core';
+
 const props = defineProps<{
   task: Task;
 }>();
+
 const date = useDateFormat(props.task.dueAt, 'MM/DD');
 </script>
 <template>

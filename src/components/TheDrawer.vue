@@ -41,6 +41,7 @@ const items = computed(() => [
     },
   },
 ]);
+
 function onSelect({ itemIndex }: { itemIndex: number }) {
   const item = items.value[itemIndex];
   if (item.data.path) router.push(item.data.path);
